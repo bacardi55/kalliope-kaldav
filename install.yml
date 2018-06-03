@@ -9,3 +9,7 @@
       pip:
         name: caldav
         version: 0.5.0
+    - name: "Install package dependencies"
+      apt:
+        name: libxml2-dev libxslt1-dev
+        state: present
