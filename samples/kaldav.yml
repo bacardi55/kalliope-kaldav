@@ -1,0 +1,67 @@
+---
+  - name: "search-events"
+    signals:
+      - order: "Give me my next {{ nb_results }} meetings"
+      - order: "Liste mes {{nb_results}} prochains rendez-vous"
+    neurons:
+      - kaldav:
+          url: "{{kaldav_url}}"
+          action: "search"
+          max_results: "{{ nb_results }}"
+
+#  - name: "search-event-by-name"
+#    signals:
+#      - order: "Look in my calendar when is {{ event_name }}"
+#    neurons:
+#      - kaldav:
+#          url: "{{kaldav_url}}"
+#          action: "search-by-name"
+#          event_name: "{{event_name}}"
+#
+#  - name: "add-event-today"
+#    signals:
+#      - order: "Add to my calendar at {{ time }} to {{ event_name }}"
+#      - order: "Ajoute un voyage de {{event_name}} le {{time}}"
+#    neurons:
+#      - kaldav:
+#          url: "{{kaldav_url}}"
+#          action: "create"
+#          time: "{{time}}"
+#          event_name: "{{event_name}}"
+#
+  - name: "add-travel"
+    signals:
+      - order: "Ajoute un voyage {{name}} départ {{start_date}} arrivée {{end_date}}"
+    neurons:
+      - kaldav:
+          url: "{{kaldav_url}}"
+          action: "create"
+          start_date: "{{start_date}}"
+          end_date: "{{end_date}}"
+          name: "{{name}}"
+          date_format: '%d %m %Y %Hh%M'
+          timezone: 'Europe/Paris'
+
+#  - name: "add-event-date"
+#    signals:
+#      - order: "Add to my calendar on the {{date}} to {{event_ename}} at {{time}}"
+#    neurons:
+#      - kaldav:
+#          url: "{{kaldav_url}}"
+#          action: "create"
+#          time: "{{time}}"
+#          event_name: "{{event_name}}"
+#          start_date: "{{date}}"
+#
+#  - name: "postpone-event-time"
+#    signals:
+#      - order: "Postpone my {{time}} meeting to {{new_time}}"
+#    neurons:
+#      - kaldav:
+#          url: "{{kaldav_url}}"
+#          action: "postpone"
+#          time: "{{time}}"
+#          new_time: "{{new_time}}"
+#
+#  - name: "cancel-event-by-time"
+#  - name: "cancel-event-by-name"

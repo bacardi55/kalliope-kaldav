@@ -1,0 +1,11 @@
+- name: Kalliope caldav euron install
+  hosts: localhost
+  gather_facts: no
+  connection: local
+  become: true
+
+  tasks:
+    - name: "Install pip dependencies"
+      pip:
+        name: caldav
+        version: 0.5.0
