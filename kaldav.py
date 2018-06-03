@@ -90,8 +90,8 @@ class Kaldav (NeuronModule):
                 logger.debug("start date local time: %s start date utc: %s "% (start_local, start))
                 logger.debug("end date local time: %s end date utc: %s "% (end_local, end))
 
-            start_str = start.strftime("%Y%m%dT%H%M00Z")
-            end_str = end.strftime("%Y%m%dT%H%M00Z")
+            start_str = start.strftime("%Y%m%dT%H%M00")
+            end_str = end.strftime("%Y%m%dT%H%M00")
             # 20180528T180000Z
             # 20180528T190000Z
 
