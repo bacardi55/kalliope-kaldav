@@ -27,6 +27,10 @@ class Kaldav (NeuronModule):
             'start_date': kwargs.get('start_date', None),
             'end_date': kwargs.get('end_date', None),
             'date_format': kwargs.get('date_format', '%b %d %Y %I:%M%p'),
+            'full_day': kwargs.get('full_day', False),
+            'reminder': kwargs.get('reminder', False),
+            # 'vevent_date_format': kwargs.get('vevent_date_format', "%Y%m%dT%H%M00Z"),
+            'location': kwargs.get('location', None),
             'timezone': kwargs.get('timezone', None)
         }
 
@@ -90,8 +94,12 @@ class Kaldav (NeuronModule):
                 logger.debug("start date local time: %s start date utc: %s "% (start_local, start))
                 logger.debug("end date local time: %s end date utc: %s "% (end_local, end))
 
-            start_str = start.strftime("%Y%m%dT%H%M00")
-            end_str = end.strftime("%Y%m%dT%H%M00")
+            if self.configuration['full_day'] is True:
+                start_str = "DTSTART;VALUE=DATE:" + start.strftime("%Y%m%d")
+                end_str = "DTEND;VALUE=DATE:" + end.strftime("%Y%m%d")
+            else: 
+                start_str = "DTSTART:" + start.strftime("%Y%m%dT%H%M00Z")
+                end_str = "DTEND:" + end.strftime("%Y%m%dT%H%M00Z")
             # 20180528T180000Z
             # 20180528T190000Z
 
@@ -100,12 +108,29 @@ VERSION:2.0
 PRODID:-//Sabre//Sabre VObject 4.1.2//EN
 CALSCALE:GREGORIAN
 BEGIN:VEVENT
-SUMMARY:""" + self.configuration['name'] + """
-DTSTART:""" + start_str + """
-DTEND:""" + end_str + """
+SUMMARY:""" + self.configuration['name']
+
+            if self.configuration['location'] is not None:
+                vcal += """
+LOCATION:""" + self.configuration['location']
+
+            vcal += """
+""" + start_str + """
+""" + end_str
+
+            if self.configuration['reminder'] is not None:
+                vcal += """
+BEGIN:VALARM
+TRIGGER:-PT""" + self.configuration['reminder'] + """M
+ACTION:DISPLAY
+DESCRIPTION:""" + self.configuration['name'] + """
+END:VALARM"""
+
+            vcal += """
 END:VEVENT
 END:VCALENDAR
 """
+
         logger.debug(vcal)
         event = calendar.add_event(vcal)
         # event = self.configuration['name']
